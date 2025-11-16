@@ -3,9 +3,11 @@ import java.util.Arrays;
 
 public class GrafoListaAdyacencia {
     public LinkedList<Arista>[] adj; 
+    public LinkedList<Arista>[] adjCopia;
     public int vertices; 
     public int aristas; 
     public serVivo[] animales;
+    public serVivo[] animalesCopia;
     public AnimalPro[] productores;
    
     @SuppressWarnings("unchecked")
@@ -13,14 +15,19 @@ public class GrafoListaAdyacencia {
         this.vertices = cantidadAnimales;
         this.aristas = 0; 
         this.animales = new serVivo[cantidadAnimales];
+        this.animalesCopia = new serVivo[cantidadAnimales];
         this.productores = new AnimalPro[cantidadProductores];
+        this.adjCopia = new LinkedList[cantidadAnimales];
+        for(int i = 0; i<vertices; i++){
+            adjCopia[i] = new LinkedList<>();
+        }
         this.adj = new LinkedList[cantidadAnimales];
         for(int i =0; i<vertices; i++){
             adj[i] = new LinkedList<>();
         }
     }
    
-    public double calcularEnergia(int servivo){ 
+    public double calcularEnergiaInicial(int servivo){ 
         //leer comentario en la clase animal
         double aux = 0;
         for(int i =0; i<adj.length; i++){
@@ -32,21 +39,48 @@ public class GrafoListaAdyacencia {
         }
         return aux; 
     }
+
+    public void calcularEnergiaFinal(serVivo[] animal){ 
+        for(int k = 0; k < adjCopia.length; k++){
+            if (animal[k] instanceof AnimalPro) {
+                animal[k].energy = animales[k].energy;
+                continue;
+            }
+            double energiaTotal = 0;
+            
+            if(animal[k] !=null){
+            // Buscar todas las aristas donde k es el DEPREDADOR
+            for(int i = 0; i < adjCopia.length; i++){
+                for(Arista a : adjCopia[i]){
+                    // Si el animal k come al animal i
+                    if(a.destino.id == k){
+                        energiaTotal -= a.peso; // SUMA la energía que obtiene
+                    }
+                }
+            }
+            
+            // Asignar la energía calculada
+            animal[k].energy = energiaTotal;
+            }
+        }
+    }
    
     public void agregarProductor(int id, String name, double energy){
         animales[id]=new AnimalPro(id, name, energy);
+        animalesCopia[id]=new AnimalPro(id, name, energy);
         productores[id] = (AnimalPro) animales[id];
     }    
    
     public void agregarAnimal(int id, String name){
         animales[id]=new Animal(id, name);
+        animalesCopia[id]=new Animal(id, name);
         // o se calcula aqui, cuando se crea el animal o cuando se crea la arista en el metodo agregarArista
         //leer primero el comentario en el metodo agregarArista
     }
 
     public void agregarArista(serVivo origen, serVivo destino){
         adj[origen.id].add(new Arista(origen, destino));
-        destino.energy = calcularEnergia(destino.id);//para poder llamar la función aqui y calcular la energia
+        destino.energy = calcularEnergiaInicial(destino.id);//para poder llamar la función aqui y calcular la energia
         //la energia se calcula para el destino porque es el que recibe la energia del origen? es decir cuando se crea la arista
         //leer el comentario el metodo agregarAnimal
         aristas++;
@@ -130,11 +164,11 @@ public class GrafoListaAdyacencia {
         }
     }
 
-    public void imprimirGrafo() {
+    public void imprimirGrafo(LinkedList<Arista>[] lista) {
         System.out.println("\n---- ESTRUCTURA DEL GRAFO ----");
         for(int i = 0; i < vertices; i++) {
             System.out.println(i + " " + animales[i].name );
-            for(Arista arista : adj[i]) {
+            for(Arista arista : lista[i]) {
                 System.out.println("   |--> " + arista.destino.id + 
                                 " (" + arista.destino.name + 
                                 ") [peso: " + (arista.peso*-1) + "]");
@@ -143,8 +177,147 @@ public class GrafoListaAdyacencia {
         }
         System.out.println("\n---- ENERGIA DE LOS ANIMALES ----");
             for(int i = 0; i < vertices; i++) {
+                if(animales[i] != null){
                 System.out.println(animales[i].name + " --> energia total: " + animales[i].energy);
                 System.out.println();
+                }
             }
     }
+
+    public void imprimirGrafoExtinto(LinkedList<Arista>[] lista) {
+        calcularEnergiaFinal(animalesCopia);
+        System.out.println("\n---- ESTRUCTURA DEL GRAFO ----");
+        for(int i = 0; i < vertices; i++) {
+            System.out.println(i + " " + animales[i].name );
+            for(Arista arista : lista[i]) {
+                System.out.println("   |--> " + arista.destino.id + 
+                                " (" + arista.destino.name + 
+                                ") [peso: " + (arista.peso*-1) + "]");
+            }
+            System.out.println();
+        }
+        
+        System.out.println("\n---- ENERGIA DE LOS ANIMALES ----");
+            for(int i = 0; i < vertices; i++) {
+                if(animalesCopia[i] != null){
+                System.out.println(animalesCopia[i].name + " --> energia total: " + animalesCopia[i].energy);
+                System.out.println();
+                }
+            }
+    }
+
+   public void eliminarAnimalDeCopia(int id){
+       if(id < 0 || id >= vertices){
+           System.out.println("ERROR: ANIMAL NO EXISTENTE EN LA CADENA TRÓFICA");
+           return;
+       }
+       
+       // 1. Eliminar aristas salientes de adjCopia
+       adjCopia[id].clear();
+       animalesCopia[id] = null;
+       
+       // 2. Eliminar aristas entrantes de adjCopia
+       for(int i = 0; i < vertices; i++){
+           if(i != id){
+               adjCopia[i].removeIf(arista -> arista.destino.id == id);
+           }
+       }
+   }
+   
+   // ==================== MUERTE EN CADENA ====================
+   
+   public void muerteEnCadena(int primerMuerto){
+       if(primerMuerto >= vertices || primerMuerto < 0){
+           System.out.println("ERROR: ID no válido para el método");
+           return;
+       }
+       
+       // Copiar adj a adjCopia al inicio
+       for(int i = 0; i < vertices; i++){
+           adjCopia[i].clear();
+           for(Arista arista : adj[i]){
+               adjCopia[i].add(new Arista(arista.origen, arista.destino));
+           }
+       }
+       
+       boolean[] losMuertos = new boolean[vertices];
+       losMuertos[primerMuerto] = true;
+       
+       System.out.println("🔥 Comienza la extinción en cadena...");
+       System.out.println("💀 Primer muerto: " + animales[primerMuerto].name);
+       
+       boolean seMurioAlguien = true;
+       int ronda = 1;
+       
+       while(seMurioAlguien){
+           seMurioAlguien = false;
+           System.out.println("\n📊 Ronda " + ronda + ":");
+           
+           for(int i = 0; i < vertices; i++){
+               if(losMuertos[i]) continue;
+               
+               boolean esProductor = false;
+               for(serVivo productor : productores){
+                   if(productor.id == i){
+                       esProductor = true;
+                       break;
+                   }
+               }
+               if(esProductor) continue;
+               
+               boolean tieneComida = false;
+               
+               for(int j = 0; j < vertices; j++){
+                   if(losMuertos[j]) continue;
+                   
+                   for(Arista arista : adjCopia[j]){
+                       if(arista.destino.id == i){
+                           tieneComida = true;
+                           break;
+                       }
+                   }
+                   if(tieneComida) break;
+               }
+               
+               if(!tieneComida){
+                   losMuertos[i] = true;
+                   seMurioAlguien = true;
+                   System.out.println("   ⚠️  " + animales[i].name + 
+                                    " se extingue por falta de alimento");
+               }
+           }
+           
+           if(!seMurioAlguien){
+               System.out.println("   ✓ No hay más extinciones en esta ronda");
+           }
+           ronda++;
+       }
+       
+       // Eliminar muertos de adjCopia
+       for(int i = 0; i < vertices; i++){
+           if(losMuertos[i]){
+               adjCopia[i].clear();
+               animalesCopia[i]  = null;
+           }
+       }
+       
+       for(int i = 0; i < vertices; i++){
+           if(!losMuertos[i]){
+               adjCopia[i].removeIf(arista -> losMuertos[arista.destino.id]);
+           }
+       }
+       
+       // Resumen
+       System.out.println("\n" + "=".repeat(50));
+       System.out.print("🪦 Especies extintas: ");
+       int numeroMuertos = 0;
+       for(int i = 0; i < vertices; i++){
+           if(losMuertos[i]){
+               System.out.print("| " + animales[i].name + " | ");
+               numeroMuertos++;
+           }
+       }
+       System.out.println("\n📊 Total extintas: " + numeroMuertos);
+       System.out.println("=".repeat(50));
+   }
 }
