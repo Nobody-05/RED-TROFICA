@@ -22,7 +22,7 @@ public class GrafoListaAdyacencia {
         for(int i =0; i<adj.length; i++){
             for(Arista a: adj[i]){
                 if(a.destino.id == servivo){
-                    aux = aux + a.peso;
+                    aux = aux - a.peso;
                 }
             }
         }
@@ -35,14 +35,13 @@ public class GrafoListaAdyacencia {
    
     public void agregarAnimal(int id, String name){
         animales[id]=new Animal(id, name);
-        animales[id].energy = calcularEnergia(id);
         // o se calcula aqui, cuando se crea el animal o cuando se crea la arista en el metodo agregarArista
         //leer primero el comentario en el metodo agregarArista
     }
 
     public void agregarArista(serVivo origen, serVivo destino){
         adj[origen.id].add(new Arista(origen, destino));
-        destino.energy = calcularEnergia(origen.id);//para poder llamar la función aqui y calcular la energia
+        destino.energy = calcularEnergia(destino.id);//para poder llamar la función aqui y calcular la energia
         //la energia se calcula para el destino porque es el que recibe la energia del origen? es decir cuando se crea la arista
         //leer el comentario el metodo agregarAnimal
         aristas++;
@@ -84,7 +83,7 @@ public class GrafoListaAdyacencia {
             }
         }
        
-        System.out.println("la distancia más corta es; " + dist[destinoId]);
+        System.out.println("El la energía total del camino mas eficiente es: " + (-1*dist[destinoId]));
     }
    
     public void imprimirGrafo() {
@@ -94,7 +93,7 @@ public class GrafoListaAdyacencia {
                 System.out.print("Nada, no tiene depredadores");
             }
             for (Arista arista : adj[i]) {
-                System.out.print("(Depredador: " + arista.destino.name + ", Peso: " + arista.peso + ") ");
+                System.out.print("(Depredador: " + arista.destino.name + ", Peso: " + (-1*arista.peso) + ") ");
             }
             System.out.println();
         }
