@@ -74,15 +74,11 @@ public class GrafoListaAdyacencia {
     public void agregarAnimal(int id, String name){
         animales[id]=new Animal(id, name);
         animalesCopia[id]=new Animal(id, name);
-        // o se calcula aqui, cuando se crea el animal o cuando se crea la arista en el metodo agregarArista
-        //leer primero el comentario en el metodo agregarArista
     }
 
     public void agregarArista(serVivo origen, serVivo destino){
         adj[origen.id].add(new Arista(origen, destino));
-        destino.energy = calcularEnergiaInicial(destino.id);//para poder llamar la función aqui y calcular la energia
-        //la energia se calcula para el destino porque es el que recibe la energia del origen? es decir cuando se crea la arista
-        //leer el comentario el metodo agregarAnimal
+        destino.energy = calcularEnergiaInicial(destino.id);
         aristas++;
     }
    
@@ -93,58 +89,59 @@ public class GrafoListaAdyacencia {
         for(int i = 0; i < productores.length; i++){
             
             // Inicializar para cada productor
-            double[] dist = new double[vertices];
+            double[] dist = new double[vertices];//se inicializa la distancia desde el productor a todos los demas nodos
             int[] predecesor = new int[vertices];
-            Arrays.fill(dist, Double.MAX_VALUE);
-            Arrays.fill(predecesor, -1);
+            Arrays.fill(dist, Double.MAX_VALUE);// la distancia desde el productor a todos los demas nodos es infinita al inicio
+            Arrays.fill(predecesor, -1);//el recorrdio desde el productor a los demas nodos es de -1
             
-            // El productor actual es el origen
+            // El productor i actual es el origen
             dist[productores[i].id] = 0;
         
             // Relajación de aristas (V-1 veces)
             for(int j = 0; j < vertices - 1; j++){
                 for(int k = 0; k < vertices; k++){
                     for(Arista arista : adj[k]){
-                        int v = arista.destino.id;
-                        double p = arista.peso;
-                        int o = arista.origen.id;
+                        int aristaDestino = arista.destino.id;//id del nodo destino de la arista k de adj
+                        double aristaPeso = arista.peso;//peso de la arista k de adj
+                        int aristaOrigen = arista.origen.id;//id del nodo origen de la arista k de adj
                         
-                        if(dist[o] != Double.MAX_VALUE && (dist[o] + p) < dist[v]){
-                            dist[v] = dist[o] + p;
-                            predecesor[v] = o; // Debería ser 'o', no 'k'
+                        if(dist[aristaOrigen] != Double.MAX_VALUE && (dist[aristaOrigen] + aristaPeso) < dist[aristaDestino]){
+                            dist[aristaDestino] = dist[aristaOrigen] + aristaPeso; // si el camino es mas corto que el que esta originalmente se actualiza la distancia
+                            predecesor[aristaDestino] = aristaOrigen; // actualiza el predecesor del nodo destino como el nodo origen
                         }
                     }
                 }
             }
         
             // Detección de ciclos negativos
-            boolean cicloNegativo = false;
+            boolean cicloNegativo = false;//se inicializa la variable boolean cicloNegativo en falso
             for(int k = 0; k < vertices; k++){
                 for(Arista arista : adj[k]){
-                    int v = arista.destino.id;
-                    double p = arista.peso;
-                    int o = arista.origen.id;
+                    int aristaDestino = arista.destino.id;//id del nodo destino de la arista k de adj
+                    double aristaPeso = arista.peso;//peso de la arista k de adj
+                    int aristaOrigen = arista.origen.id;//id del nodo origen de la arista k de adj
                     
-                    if(dist[o] != Double.MAX_VALUE && (dist[o] + p) < dist[v]){
+                    if(dist[aristaOrigen] != Double.MAX_VALUE && (dist[aristaOrigen] + aristaPeso) < dist[aristaDestino]){
                         System.out.println("El grafo contiene un ciclo de peso negativo.");
-                        cicloNegativo = true;
+                        cicloNegativo = true;//si se encuentra un ciclo negativo se cambia la variable cicloNegativo a verdadero
                         break;
                     }
                 }
-                if(cicloNegativo) break;
+                if(cicloNegativo) break;//si se encuentra un ciclo negativo se sale del bucle externo
             }
             
-            if(cicloNegativo) return;
+            if(cicloNegativo) return;//si se encuentra un ciclo negativo se termina la ejecucion del metodo
             
             // Imprimir resultado para este productor
-            if(dist[destinoId] == Double.MAX_VALUE){
+            if(dist[destinoId] == Double.MAX_VALUE){//si la distancia desde el productor al destino es infinita significa que no se actualizo 
+                //la distacia con bellman ford y por ende no hay camino hasta el destino
                 System.out.println("No hay camino desde " + productores[i].name + 
                                 " hasta " + animales[destinoId].name);
             } else {
-                System.out.println("\nDesde " + productores[i].name + ":");
+                System.out.println("\nDesde " + productores[i].name + ":");//se imprime el nombre del productor i actual
                 System.out.println("La energía total del camino más eficiente es: " + 
-                                (-1 * dist[destinoId]));
-                imprimirCamino(predecesor, productores[i].id, destinoId);
+                                (-1 * dist[destinoId]));//se imprime el valor desde el productor i hasta el destino multiplicado 
+                imprimirCamino(predecesor, productores[i].id, destinoId);//se imprime el camino desde el productor i hasta el destino
                 System.out.println(); 
             }
             System.out.println(); // Línea en blanco entre resultados
@@ -152,14 +149,14 @@ public class GrafoListaAdyacencia {
     }
 
     private void imprimirCamino(int[] predecesor, int origenId, int destinoId){
-        if(destinoId == origenId){
+        if(destinoId == origenId){// caso base: si el nodo destino es igual al nodo origen 
             System.out.print(animales[origenId].name + " ");
         }
-        else if(predecesor[destinoId] == -1){
+        else if(predecesor[destinoId] == -1){// si el predecesor del nodo destino es -1 significa que no se actualizo el recorrido y por ende no hay camino
             System.out.println("No hay camino desde " + productores[origenId].name + " hasta " + animales[destinoId].name);
         }
         else{
-            imprimirCamino(predecesor, origenId, predecesor[destinoId]);
+            imprimirCamino(predecesor, origenId, predecesor[destinoId]);//se llama recursivamente al método para imprimir el camino desde el origen hasta el predecesor del destino
             System.out.print("-> " + animales[destinoId].name + " ");
         }
     }
@@ -168,7 +165,7 @@ public class GrafoListaAdyacencia {
         System.out.println("\n---- ESTRUCTURA DEL GRAFO ----");
         for(int i = 0; i < vertices; i++) {
             System.out.println(i + " " + animales[i].name );
-            for(Arista arista : lista[i]) {
+            for(Arista arista : lista[i]) {//impresión de los datos de al arista destino de i
                 System.out.println("   |--> " + arista.destino.id + 
                                 " (" + arista.destino.name + 
                                 ") [peso: " + (arista.peso*-1) + "]");
@@ -178,7 +175,7 @@ public class GrafoListaAdyacencia {
         System.out.println("\n---- ENERGIA DE LOS ANIMALES ----");
             for(int i = 0; i < vertices; i++) {
                 if(animales[i] != null){
-                System.out.println(animales[i].name + " --> energia total: " + animales[i].energy);
+                System.out.println(animales[i].name + " --> energia total: " + animales[i].energy);//impresión de la energía total del animal i
                 System.out.println();
                 }
             }
