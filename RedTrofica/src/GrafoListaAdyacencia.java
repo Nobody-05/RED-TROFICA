@@ -92,12 +92,7 @@ public class GrafoListaAdyacencia {
         //Aumentamos el contador de aristas
         aristas++;
     }
-    
-    /*Metodo para calular la energia antes de la extinción de
-    una especie*/
-    //Recibimos como parametros el id del destino
     public double calcularEnergiaInicial(int destinoID){ 
-        //Declaramos un auxiliar tipo double y la igualamos a 0
         double auxiliar = 0;
         //Creamos un for para recorrer toda la lista de adyacencia
         for(int i =0; i<adyacencia.length; i++){
@@ -113,6 +108,33 @@ public class GrafoListaAdyacencia {
         }
         //Retornamos el valor para la energia del destino
         return auxiliar; 
+    }
+    /*Metodo para calular la energia antes de la extinción de
+    una especie*/
+    //Recibimos como parametros el id del destino
+    public void calcularEnergiaFinal(LinkedList<Arista>[] lista, serVivo[] animales){ 
+        for(int k = 0; k < lista.length; k++){
+            if (animales[k] instanceof AnimalPro) {
+                animales[k].energia = animales[k].energia;
+                continue;
+            }
+            double energiaTotal = 0;
+            
+            if(animales[k] !=null){
+            // Buscar todas las aristas donde k es el DEPREDADOR
+            for(int i = 0; i < lista.length; i++){
+                for(Arista a : lista[i]){
+                    // Si el animal k come al animal i
+                    if(a.destino.id == k){
+                        energiaTotal -= a.peso; // SUMA la energía que obtiene
+                    }
+                }
+            }
+            
+            // Asignar la energía calculada
+            animales[k].energia = energiaTotal;
+            }
+        }
     }
     //Bellman Ford para hallar la ruta que más proporciona.
     public void BellmanFord(int destinoId){
@@ -198,31 +220,7 @@ public class GrafoListaAdyacencia {
             // Línea en blanco entre resultados
             System.out.println(); 
         }
-    }
-    public void calcularEnergiaFinal(LinkedList<Arista>[] lista, serVivo[] animales){ 
-        for(int k = 0; k < lista.length; k++){
-            if (animales[k] instanceof AnimalPro) {
-                animales[k].energia = animales[k].energia;
-                continue;
-            }
-            double energiaTotal = 0;
-            
-            if(animales[k] !=null){
-            // Buscar todas las aristas donde k es el DEPREDADOR
-            for(int i = 0; i < lista.length; i++){
-                for(Arista a : lista[i]){
-                    // Si el animal k come al animal i
-                    if(a.destino.id == k){
-                        energiaTotal -= a.peso; // SUMA la energía que obtiene
-                    }
-                }
-            }
-            
-            // Asignar la energía calculada
-            animales[k].energia = energiaTotal;
-            }
-        }
-    }
+    }    
 
     private void imprimirCamino(int[] predecesor, int origenId, int destinoId){
         // caso base: si el nodo destino es igual al nodo origen
