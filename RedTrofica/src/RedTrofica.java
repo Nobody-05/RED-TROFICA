@@ -7,7 +7,7 @@ public class RedTrofica {
         
         while (continuarPrograma) {
             // Crear e inicializar la red trófica
-            GrafoListaAdyacencia redTrofica = new GrafoListaAdyacencia(20, 5);
+            GrafoListaAdyacencia redTrofica = new GrafoListaAdyacencia(23, 5);
             inicializarRedTrofica(redTrofica);
             
             // Mostrar el grafo inicial
@@ -107,6 +107,9 @@ public class RedTrofica {
         redTrofica.agregarAnimal(17, "Pajaro carpintero");
         redTrofica.agregarAnimal(18, "Aguila");
         redTrofica.agregarAnimal(19, "Hongo");
+        redTrofica.agregarAnimal(20, "Jabali");
+        redTrofica.agregarAnimal(21, "Coyote");
+        redTrofica.agregarAnimal(22, "Buitre cabecirrojo");
     
         // Crear referencias a los nodos
         serVivo arbolDeRoble = redTrofica.animales[0];
@@ -128,7 +131,10 @@ public class RedTrofica {
         serVivo lobo = redTrofica.animales[16];
         serVivo pajaroCarpintero = redTrofica.animales[17];
         serVivo aguila = redTrofica.animales[18];
-        serVivo hongo = redTrofica.animales[19]; 
+        serVivo hongo = redTrofica.animales[19];
+        serVivo jabali = redTrofica.animales[20];
+        serVivo coyote = redTrofica.animales[21];
+        serVivo buitreCabecirrojo = redTrofica.animales[22];
     
         // Crear aristas (relaciones tróficas)
         redTrofica.agregarArista(arbolDeRoble, ardilla);
@@ -153,6 +159,16 @@ public class RedTrofica {
         redTrofica.agregarArista(serpiente, aguila);
         redTrofica.agregarArista(lobo, hongo);
         redTrofica.agregarArista(aguila, hongo);
-
+        redTrofica.agregarArista(arbustoDeBayas, jabali);
+        redTrofica.agregarArista(hierba, jabali);
+        redTrofica.agregarArista(helecho, jabali);
+        redTrofica.agregarArista(jabali, oso);
+        redTrofica.agregarArista(jabali, lobo);
+        redTrofica.agregarArista(venado, oso);
+        redTrofica.agregarArista(venado, coyote);
+        redTrofica.agregarArista(conejo, lobo);
+        redTrofica.agregarArista(coyote, lobo);
+        redTrofica.agregarArista(coyote, buitreCabecirrojo);
+        redTrofica.agregarArista(buitreCabecirrojo, aguila);
     }
 }
