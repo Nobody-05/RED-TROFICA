@@ -8,6 +8,6 @@ public class Arista {
     public Arista(serVivo origen, serVivo destino){
         this.destino = destino;
         this.origen = origen;
-        this.peso = origen.energia * -0.1;
+        this.peso = origen.energia * 0.1;
     }
 }

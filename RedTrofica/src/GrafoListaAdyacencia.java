@@ -65,14 +65,14 @@ public class GrafoListaAdyacencia {
                     for(Arista a : adyacencia[i]){
                         // Si el animal k come al animal i
                         if(a.destino.id == k && a.destino != null && a.origen !=null){
-                            energiaTotal -= a.peso; // SUMA la energía que obtiene usando pesos negativos  
+                            energiaTotal += a.peso; // SUMA la energía que obtiene usando pesos negativos  
                         }
                     }
                 }
                 // el valor de todas las aristas salientes desde de la energia del anterior animal calculada calculada
                 animales[k].energia = energiaTotal;
                 for(Arista a: adyacencia[k]){
-                    a.peso = a.origen.energia*-0.1;
+                    a.peso = a.origen.energia*0.1;
                 }
             }
         }
@@ -149,7 +149,7 @@ public class GrafoListaAdyacencia {
                     System.out.println("\nDesde " + animales[i].especie + ":");
                     //se imprime el valor desde el productor i hasta el destino multiplicado 
                     System.out.println("La energia total del camino mas eficiente es: " + 
-                                    (-1 * dist[destinoId]));
+                                    ( dist[destinoId]));
                     //se imprime el camino desde el productor i hasta el destino
                     imprimirCamino(predecesor, animales[i].id, destinoId);
                     System.out.println(); 
@@ -182,7 +182,7 @@ public class GrafoListaAdyacencia {
             for(Arista arista : adyacencia[i]) {
                 System.out.println("   |--> " + arista.destino.id + 
                                 " (" + arista.destino.especie + 
-                                ") [peso: " + (arista.peso*-1) + "]");
+                                ") [peso: " + (arista.peso) + "]");
             }
             System.out.println();
             }
