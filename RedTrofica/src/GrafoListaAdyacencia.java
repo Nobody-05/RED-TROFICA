@@ -148,7 +148,7 @@ public class GrafoListaAdyacencia {
                     //se imprime el nombre del productor i actual
                     System.out.println("\nDesde " + animales[i].especie + ":");
                     //se imprime el valor desde el productor i hasta el destino multiplicado 
-                    System.out.println("La energia total del camino mas eficiente es: " + 
+                    System.out.println("La energia total desde el camino por el cual depredador recibe mas energia de un productor es: " + 
                                     ( dist[destinoId]));
                     //se imprime el camino desde el productor i hasta el destino
                     imprimirCamino(predecesor, animales[i].id, destinoId);
