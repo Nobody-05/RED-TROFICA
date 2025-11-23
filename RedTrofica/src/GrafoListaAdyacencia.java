@@ -64,14 +64,16 @@ public class GrafoListaAdyacencia {
                 for(int i = 0; i < adyacencia.length; i++){
                     for(Arista a : adyacencia[i]){
                         // Si el animal k come al animal i
-                        if(a.destino.id == k && a.destino != null && a.origen !=null ){
-                            a.peso = a.origen.energia*-0.1;
-                            energiaTotal -= a.peso; // SUMA la energía que obtiene usando pesos negativos
-                            
+                        if(a.destino.id == k && a.destino != null && a.origen !=null){
+                            energiaTotal -= a.peso; // SUMA la energía que obtiene usando pesos negativos  
                         }
                     }
                 }
-            animales[k].energia = energiaTotal;
+                // el valor de todas las aristas salientes desde de la energia del anterior animal calculada calculada
+                animales[k].energia = energiaTotal;
+                for(Arista a: adyacencia[k]){
+                    a.peso = a.origen.energia*-0.1;
+                }
             }
         }
     }
@@ -186,7 +188,7 @@ public class GrafoListaAdyacencia {
             }
         }
 
-        System.out.println("\nID| ANIMALES | ENERGIA");
+        System.out.println("\n   ID   |    ANIMALES    |    ENERGIA");
             for(int i = 0; i < vertices; i++) {
                 if(animales[i] != null){
                 //impresión de la energía total del animal i
@@ -278,7 +280,7 @@ public class GrafoListaAdyacencia {
             }
         }
         // Resumen
-        System.out.println("\n" + "=".repeat(50));
+        System.out.println("\n" + "-------------");
         System.out.print("Especies extintas: ");
         int numeroMuertos = 0;
         for(int i = 0; i < vertices; i++){
@@ -287,6 +289,6 @@ public class GrafoListaAdyacencia {
             }
         }
         System.out.println("\nTotal extintas: " + numeroMuertos);
-        System.out.println("=".repeat(50));
+        System.out.println("----------------");
     }
 }

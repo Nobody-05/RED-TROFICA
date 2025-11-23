@@ -92,24 +92,25 @@ public class RedTrofica {
         redTrofica.agregarProductor(4, "Helecho", 490);
         
         // Agregar animales
-        redTrofica.agregarAnimal(5, "Ardilla");
-        redTrofica.agregarAnimal(6, "Raton");
-        redTrofica.agregarAnimal(7, "Abeja");
-        redTrofica.agregarAnimal(8, "Oso");
-        redTrofica.agregarAnimal(9, "Conejo");
+        redTrofica.agregarAnimal(5, "Mariposa");
+        redTrofica.agregarAnimal(6, "Ardilla");
+        redTrofica.agregarAnimal(7, "Raton");
+        redTrofica.agregarAnimal(8, "Abeja");
+        redTrofica.agregarAnimal(9, "Jabali");
         redTrofica.agregarAnimal(10, "Venado");
-        redTrofica.agregarAnimal(11, "Rana");
-        redTrofica.agregarAnimal(12, "Zorro");
-        redTrofica.agregarAnimal(13, "Mariposa");
-        redTrofica.agregarAnimal(14, "Serpiente");
-        redTrofica.agregarAnimal(15, "Bacteria Descomponedora");
-        redTrofica.agregarAnimal(16, "Lobo");
-        redTrofica.agregarAnimal(17, "Pajaro carpintero");
+        redTrofica.agregarAnimal(11, "Pajaro carpintero");
+        redTrofica.agregarAnimal(12, "Rana");  
+        redTrofica.agregarAnimal(13, "Oso");
+        redTrofica.agregarAnimal(14, "Conejo");
+        redTrofica.agregarAnimal(15, "Coyote");
+        redTrofica.agregarAnimal(16, "Serpiente");
+        redTrofica.agregarAnimal(17, "Buitre cabecirrojo");
         redTrofica.agregarAnimal(18, "Aguila");
-        redTrofica.agregarAnimal(19, "Hongo");
-        redTrofica.agregarAnimal(20, "Jabali");
-        redTrofica.agregarAnimal(21, "Coyote");
-        redTrofica.agregarAnimal(22, "Buitre cabecirrojo");
+        redTrofica.agregarAnimal(19, "Zorro");
+        redTrofica.agregarAnimal(20, "Lobo");
+        redTrofica.agregarAnimal(21, "Hongo");
+        redTrofica.agregarAnimal(22, "Bacteria Descomponedora");
+        
     
         // Crear referencias a los nodos
         serVivo arbolDeRoble = redTrofica.animales[0];
@@ -117,24 +118,24 @@ public class RedTrofica {
         serVivo arbustoDeBayas = redTrofica.animales[2];
         serVivo hierba = redTrofica.animales[3]; 
         serVivo helecho = redTrofica.animales[4];
-        serVivo ardilla = redTrofica.animales[5];
-        serVivo raton = redTrofica.animales[6];
-        serVivo abeja = redTrofica.animales[7];
-        serVivo oso = redTrofica.animales[8];
-        serVivo conejo = redTrofica.animales[9];
+        serVivo mariposa = redTrofica.animales[5];
+        serVivo ardilla = redTrofica.animales[6];
+        serVivo raton = redTrofica.animales[7];
+        serVivo abeja = redTrofica.animales[8];
+        serVivo jabali = redTrofica.animales[9];
         serVivo venado = redTrofica.animales[10];
-        serVivo rana = redTrofica.animales[11];
-        serVivo zorro = redTrofica.animales[12];
-        serVivo mariposa = redTrofica.animales[13];
-        serVivo serpiente = redTrofica.animales[14];
-        serVivo bacteriaDescomponedora = redTrofica.animales[15];
-        serVivo lobo = redTrofica.animales[16];
-        serVivo pajaroCarpintero = redTrofica.animales[17];
+        serVivo pajaroCarpintero = redTrofica.animales[11];
+        serVivo rana = redTrofica.animales[12];
+        serVivo oso = redTrofica.animales[13];
+        serVivo conejo = redTrofica.animales[14];
+        serVivo coyote = redTrofica.animales[15];
+        serVivo serpiente = redTrofica.animales[16];
+        serVivo buitreCabecirrojo = redTrofica.animales[17];
         serVivo aguila = redTrofica.animales[18];
-        serVivo hongo = redTrofica.animales[19];
-        serVivo jabali = redTrofica.animales[20];
-        serVivo coyote = redTrofica.animales[21];
-        serVivo buitreCabecirrojo = redTrofica.animales[22];
+        serVivo zorro = redTrofica.animales[19];
+        serVivo lobo = redTrofica.animales[20];
+        serVivo hongo = redTrofica.animales[21];
+        serVivo bacteriaDescomponedora = redTrofica.animales[22];
     
         // Crear aristas (relaciones tróficas)
         redTrofica.agregarArista(arbolDeRoble, ardilla);
@@ -162,6 +163,7 @@ public class RedTrofica {
         redTrofica.agregarArista(arbustoDeBayas, jabali);
         redTrofica.agregarArista(hierba, jabali);
         redTrofica.agregarArista(helecho, jabali);
+        redTrofica.agregarArista(buitreCabecirrojo, aguila);
         redTrofica.agregarArista(jabali, oso);
         redTrofica.agregarArista(jabali, lobo);
         redTrofica.agregarArista(venado, oso);
@@ -169,6 +171,6 @@ public class RedTrofica {
         redTrofica.agregarArista(conejo, lobo);
         redTrofica.agregarArista(coyote, lobo);
         redTrofica.agregarArista(coyote, buitreCabecirrojo);
-        redTrofica.agregarArista(buitreCabecirrojo, aguila);
+        
     }
 }
