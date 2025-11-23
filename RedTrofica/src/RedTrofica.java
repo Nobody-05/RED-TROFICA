@@ -11,8 +11,11 @@ public class RedTrofica {
             inicializarRedTrofica(redTrofica);
             
             // Mostrar el grafo inicial
-            redTrofica.imprimirGrafo(redTrofica.adyacencia);
+            redTrofica.imprimirGrafo();
 
+            // Ciclo de eliminación de nodos
+            boolean seguirEliminando = true;
+            while (seguirEliminando) {
             // Opción de camino óptimo
             System.out.println("\nDesea ver el camino más óptimo entre los productores y un consumidor específico? (Si/No)");
             String respuestaCaminoOptimo = scanner.nextLine();
@@ -24,9 +27,6 @@ public class RedTrofica {
                 redTrofica.BellmanFord(consumidorId);   
             }
 
-            // Ciclo de eliminación de nodos
-            boolean seguirEliminando = true;
-            while (seguirEliminando) {
                 System.out.println("\nDesea eliminar un nodo | extinción de especie? (Si/No)");
                 String respuestaEliminar = scanner.nextLine();
                 
@@ -35,14 +35,14 @@ public class RedTrofica {
                     int animalId = scanner.nextInt();
                     scanner.nextLine();
                     
-                    redTrofica.eliminarAnimalDeCopia(animalId);
                     redTrofica.muerteEnCadena(animalId);
-                    redTrofica.imprimirGrafoExtinto(redTrofica.adyacenciaCopia);
+                    redTrofica.imprimirGrafo();
                     
                     System.out.println("\n¿Qué desea hacer?");
-                    System.out.println("1. Seguir eliminando nodos");
-                    System.out.println("2. Reiniciar la simulación (red trófica completa)");
-                    System.out.println("3. Salir del programa");
+                    System.out.println("1. Calcular flujo productor-consumidor");
+                    System.out.println("2. Seguir eliminando nodos");
+                    System.out.println("3. Reiniciar la simulación (red trófica completa)");
+                    System.out.println("4. Salir del programa");
                     System.out.print("Opción: ");
                     
                     String opcion = scanner.nextLine();
@@ -52,12 +52,15 @@ public class RedTrofica {
                             seguirEliminando = true;
                             break;
                         case "2":
-                            seguirEliminando = false;
+                            seguirEliminando = true;
                             break;
                         case "3":
                             seguirEliminando = false;
-                            continuarPrograma = false;
                             break;
+                        case "4":
+                            seguirEliminando = false;
+                            continuarPrograma = false;
+                            break;    
                         default:
                             System.out.println("Opción inválida. Continuando...");
                             seguirEliminando = true;
@@ -150,5 +153,6 @@ public class RedTrofica {
         redTrofica.agregarArista(serpiente, aguila);
         redTrofica.agregarArista(lobo, hongo);
         redTrofica.agregarArista(aguila, hongo);
+
     }
 }
