@@ -26,7 +26,7 @@ public class RedTrofica {
                 System.out.println("\n╔════════════════════════════════════════════════════════════╗");
                 System.out.println("║                    MENÚ PRINCIPAL                          ║");
                 System.out.println("╠════════════════════════════════════════════════════════════╣");
-                System.out.println("║ 1. Ver camino óptimo productor-consumidor                  ║");
+                System.out.println("║ 1. Ver camino optimo productor-consumidor                  ║");
                 System.out.println("║ 2. Eliminar nodo (simular extinción)                       ║");
                 System.out.println("║ 3. Reiniciar simulación (red trófica completa)             ║");
                 System.out.println("║ 4. Salir del programa                                      ║");
@@ -38,7 +38,7 @@ public class RedTrofica {
                 switch (opcion) {
                     case "1":
                         // Camino óptimo
-                        System.out.println("\n--- ANÁLISIS DE CAMINO ÓPTIMO ---");
+                        System.out.println("\n--- ANALISIS DE CAMINO ÓPTIMO ---");
                         System.out.print("Ingrese el ID del consumidor: ");
                         int consumidorId = scanner.nextInt();
                         scanner.nextLine(); 
@@ -68,7 +68,7 @@ public class RedTrofica {
                         break;
                         
                     default:
-                        System.out.println("\n Opción inválida. Por favor seleccione una opción del 1 al 4.");
+                        System.out.println("\n Opción invalida. Por favor seleccione una opcion del 1 al 4.");
                 }
             }
         }
