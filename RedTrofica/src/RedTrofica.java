@@ -85,9 +85,9 @@ public class RedTrofica {
     // Método auxiliar para inicializar toda la red trófica
     private static void inicializarRedTrofica(GrafoListaAdyacencia redTrofica) {
         // Agregar productores
-        redTrofica.agregarProductor(0, "Arbol de roble", 4200);
+        redTrofica.agregarProductor(0, "Arbol de roble", 1500);
         redTrofica.agregarProductor(1, "Musgo", 210);
-        redTrofica.agregarProductor(2, "Arbusto de bayas", 1400);
+        redTrofica.agregarProductor(2, "Arbusto de bayas", 1200);
         redTrofica.agregarProductor(3, "Hierba", 700);
         redTrofica.agregarProductor(4, "Helecho", 490);
         
@@ -171,6 +171,8 @@ public class RedTrofica {
         redTrofica.agregarArista(conejo, lobo);
         redTrofica.agregarArista(coyote, lobo);
         redTrofica.agregarArista(coyote, buitreCabecirrojo);
-        
+        redTrofica.agregarArista(rana, aguila);
+        redTrofica.agregarArista(arbustoDeBayas, conejo);
+        redTrofica.agregarArista(conejo, aguila);
     }
 }
