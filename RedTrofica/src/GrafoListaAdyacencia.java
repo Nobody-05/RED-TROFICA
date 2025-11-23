@@ -80,6 +80,11 @@ public class GrafoListaAdyacencia {
     //Bellman Ford para hallar la ruta que más proporciona energía desde todos los productores hacia el depredador elegido
     public void BellmanFord(int destinoId){
 
+        // validar que no pida un productor
+        if(animales[destinoId] instanceof AnimalPro){
+            System.out.println("No se pueden calcular caminos hacia productores");
+            return;
+        }
         // validar que no pida una ya extinto
         if(animales[destinoId] == null){
             System.out.println("ERROR: El animal ya fue eliminado");
