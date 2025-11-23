@@ -4,83 +4,82 @@ public class RedTrofica {
     public static void main(String[] args) throws Exception {
         Scanner scanner = new Scanner(System.in);
         boolean continuarPrograma = true;
-        
+
+        // Saludo inicial
+        System.out.println("╔════════════════════════════════════════════════════════════╗");
+        System.out.println("║        BIENVENIDO AL SIMULADOR DE REDES TRÓFICAS           ║");
+        System.out.println("║                                                            ║");
+        System.out.println("╚════════════════════════════════════════════════════════════╝\n");
+
         while (continuarPrograma) {
             // Crear e inicializar la red trófica
             GrafoListaAdyacencia redTrofica = new GrafoListaAdyacencia(23, 5);
             inicializarRedTrofica(redTrofica);
             
             // Mostrar el grafo inicial
+            System.out.println("\n--- RED TRÓFICA INICIAL ---");
             redTrofica.imprimirGrafo();
-
-            // Ciclo de eliminación de nodos
-            boolean seguirEliminando = true;
-            while (seguirEliminando) {
-            // Opción de camino óptimo
-            System.out.println("\nDesea ver el camino más óptimo entre los productores y un consumidor específico? (Si/No)");
-            String respuestaCaminoOptimo = scanner.nextLine();
             
-            if (respuestaCaminoOptimo.equalsIgnoreCase("Si")) {
-                System.out.println("Ingrese el id del consumidor: ");
-                int consumidorId = scanner.nextInt();
-                scanner.nextLine();
-                redTrofica.BellmanFord(consumidorId);   
-            }
-
-                System.out.println("\nDesea eliminar un nodo | extinción de especie? (Si/No)");
-                String respuestaEliminar = scanner.nextLine();
+            // Menú principal
+            boolean volverAlMenu = true;
+            while (volverAlMenu) {
+                System.out.println("\n╔════════════════════════════════════════════════════════════╗");
+                System.out.println("║                    MENÚ PRINCIPAL                          ║");
+                System.out.println("╠════════════════════════════════════════════════════════════╣");
+                System.out.println("║ 1. Ver camino óptimo productor-consumidor                  ║");
+                System.out.println("║ 2. Eliminar nodo (simular extinción)                       ║");
+                System.out.println("║ 3. Reiniciar simulación (red trófica completa)             ║");
+                System.out.println("║ 4. Salir del programa                                      ║");
+                System.out.println("╚════════════════════════════════════════════════════════════╝");
+                System.out.print("Seleccione una opción: ");
                 
-                if (respuestaEliminar.equalsIgnoreCase("Si")) {
-                    System.out.println("Ingrese el id del animal a eliminar: ");
-                    int animalId = scanner.nextInt();
-                    scanner.nextLine();
-                    
-                    redTrofica.muerteEnCadena(animalId);
-                    redTrofica.imprimirGrafo();
-                    
-                    System.out.println("\n¿Qué desea hacer?");
-                    System.out.println("1. Calcular flujo productor-consumidor");
-                    System.out.println("2. Seguir eliminando nodos");
-                    System.out.println("3. Reiniciar la simulación (red trófica completa)");
-                    System.out.println("4. Salir del programa");
-                    System.out.print("Opción: ");
-                    
-                    String opcion = scanner.nextLine();
-                    
-                    switch (opcion) {
-                        case "1":
-                            seguirEliminando = true;
-                            break;
-                        case "2":
-                            seguirEliminando = true;
-                            break;
-                        case "3":
-                            seguirEliminando = false;
-                            break;
-                        case "4":
-                            seguirEliminando = false;
-                            continuarPrograma = false;
-                            break;    
-                        default:
-                            System.out.println("Opción inválida. Continuando...");
-                            seguirEliminando = true;
-                    }
-                } else {
-                    seguirEliminando = false;
+                String opcion = scanner.nextLine();
+                
+                switch (opcion) {
+                    case "1":
+                        // Camino óptimo
+                        System.out.println("\n--- ANÁLISIS DE CAMINO ÓPTIMO ---");
+                        System.out.print("Ingrese el ID del consumidor: ");
+                        int consumidorId = scanner.nextInt();
+                        scanner.nextLine(); 
+                        redTrofica.BellmanFord(consumidorId);
+                        break;
+                        
+                    case "2":
+                        // Eliminar nodo
+                        System.out.println("\n--- SIMULACIÓN DE EXTINCIÓN ---");
+                        System.out.print("Ingrese el ID del animal a eliminar: ");
+                        int animalId = scanner.nextInt();
+                        scanner.nextLine();
+                        redTrofica.muerteEnCadena(animalId);
+                        redTrofica.imprimirGrafo();
+                        break;
+                        
+                    case "3":
+                        // Reiniciar
+                        System.out.println("\nReiniciando simulación...");
+                        volverAlMenu = false;
+                        break;
+                        
+                    case "4":
+                        // Salir
+                        volverAlMenu = false;
+                        continuarPrograma = false;
+                        break;
+                        
+                    default:
+                        System.out.println("\n Opción inválida. Por favor seleccione una opción del 1 al 4.");
                 }
             }
-            
-            // Si no eligió salir, preguntar si quiere reiniciar
-            if (continuarPrograma) {
-                System.out.println("\n¿Desea reiniciar la simulación con una red trófica nueva? (Si/No)");
-                String respuestaReiniciar = scanner.nextLine();
-                continuarPrograma = respuestaReiniciar.equalsIgnoreCase("Si");
-            }
         }
-        
-        System.out.println("\nGracias por usar el simulador de red tróficas. Hasta luego...");
+
+        System.out.println("\n╔════════════════════════════════════════════════════════════╗");
+        System.out.println("║   Gracias por usar el Simulador de Redes Tróficas          ║");
+        System.out.println("║   Hasta luego                                              ║");
+        System.out.println("╚════════════════════════════════════════════════════════════╝\n");
         scanner.close();
     }
+
     
     // Método auxiliar para inicializar toda la red trófica
     private static void inicializarRedTrofica(GrafoListaAdyacencia redTrofica) {
