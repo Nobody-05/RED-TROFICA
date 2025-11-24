@@ -79,17 +79,6 @@ public class GrafoListaAdyacencia {
     }
     //Bellman Ford para hallar la ruta que más proporciona energía desde todos los productores hacia el depredador elegido
     public void BellmanFord(int destinoId){
-
-        // validar que no pida un productor
-        if(animales[destinoId] instanceof AnimalPro){
-            System.out.println("No se pueden calcular caminos hacia productores");
-            return;
-        }
-        // validar que no pida una ya extinto
-        if(animales[destinoId] == null){
-            System.out.println("ERROR: El animal ya fue eliminado");
-            return;
-        }
         
         System.out.println("Caminos mas eficientes desde cada productor hacia " + animales[destinoId].especie);
         for(int i = 0; i < animales.length; i++){ // Bellman-Ford desde cada productor
@@ -159,7 +148,7 @@ public class GrafoListaAdyacencia {
                     //se imprime el nombre del productor i actual
                     System.out.println("\nDesde " + animales[i].especie + ":");
                     //se imprime el valor desde el productor i hasta el destino multiplicado 
-                    System.out.println("La energia total que fluye por el camino en el cual depredador recibe mas energia de " + animales[i].especie + " es: "  + 
+                    System.out.println("La energia total desde el camino por el cual depredador recibe mas energia de un productor es: " + 
                                     ( dist[destinoId]));
                     //se imprime el camino desde el productor i hasta el destino
                     imprimirCamino(predecesor, animales[i].id, destinoId);
@@ -209,89 +198,89 @@ public class GrafoListaAdyacencia {
             }
     }
  
-    public void muerteEnCadena(int primerMuerto){
-        if(primerMuerto >= vertices || primerMuerto < 0){
+    public void muerteEnCadena(int primerMuerto){ //se le pide el id del animal que se desea matar de primero;
+        if(primerMuerto >= vertices || primerMuerto < 0){ //valida que el id que ponga el usuario no este fuera de rango del grafo;
             System.out.println("ERROR: ID no valido para el metodo");
             return;
         }
         
-        // Validar que el animal exista antes de eliminarlo
+        // otro if para validad si el animal ya fue eliminado;
         if(animales[primerMuerto] == null){
             System.out.println("ERROR: El animal ya fue eliminado");
             return;
         }
         
-        boolean[] losMuertos = new boolean[vertices];
-        losMuertos[primerMuerto] = true;
+        boolean[] losMuertos = new boolean[vertices]; //vector de booleans para guardar los animales muertos;
+        losMuertos[primerMuerto] = true; //se asume que el primer animal ya esta muerto;
         
-        System.out.println("Comienza la extincion en cadena...");
+        System.out.println("Comienza la extincion en cadena..."); //mensaje;
         System.out.println("Primer muerto: " + animales[primerMuerto].especie);
         
-        boolean seMurioAlguien = true;
-        int ronda = 1;
+        boolean seMurioAlguien = true; //boolean para controlar el while;
+        int ronda = 1;//numero de ronda;
         
-        while(seMurioAlguien){
-            seMurioAlguien = false;
+        while(seMurioAlguien){//mientras alguien se muera, continuará la muerte en cadena;
+            seMurioAlguien = false; //primero se asume que nadie murió;
             System.out.println("\nRonda " + ronda + ":");
             
-            for(int i = 0; i < vertices; i++){
-                // Saltar si ya está muerto o es null
-                if(losMuertos[i] || animales[i] == null) continue;
+            for(int i = 0; i < vertices; i++){ //for para recorrer todos los animales;
                 
-                // Verificar si es productor
-                boolean esProductor = false;
-                for(serVivo animal : animales){
-                    if(animal != null && animal.id == i && animal instanceof AnimalPro){
+                if(losMuertos[i] || animales[i] == null) continue; //si el animal ya se murió, ignorar;
+                
+                
+                boolean esProductor = false; //boolean para verificar si es productor;
+                for(serVivo animal : animales){ //for que recorre todos los animales;
+                    if(animal != null && animal.id == i && animal instanceof AnimalPro){ //si el animal es una instancia de animal pro, es productor;
                         esProductor = true;
-                        break;
+                        break; //para el for, porque es productor;
                     }
                 }
                 if(esProductor) continue;
                 
                 // Verificar si tiene comida
-                boolean tieneComida = false;
+                boolean tieneComida = false; //boolean para controlar si el animal tiene comida;
                 
-                for(int j = 0; j < vertices; j++){
-                    if(losMuertos[j] || animales[j] == null) continue;
-                    for(Arista arista : adyacencia[j]){
-                        // Verificar que el destino no sea null
-                        if(arista.destino != null && arista.destino.id == i){
+                for(int j = 0; j < vertices; j++){ //for para recorrer todos los animales;
+                    if(losMuertos[j] || animales[j] == null) continue; //si el animal ya se murió, ignorar;
+                    for(Arista arista : adyacencia[j]){ //for para recorrer las aristas de cada animal;
+                        
+                        if(arista.destino != null && arista.destino.id == i){//si el animal tiene una arista no nula, tiene comida;
                             tieneComida = true;
-                            break;
+                            break;//para porque ya encontró que tiene comida;
                         }
                     }
                     if(tieneComida) break;
                 }
                 
-                if(!tieneComida){
-                    losMuertos[i] = true;
-                    seMurioAlguien = true;
+                if(!tieneComida){ //si no tiene comida, se va a morir;
+                    losMuertos[i] = true; //se marca como muerto;
+                    seMurioAlguien = true; //se indica que alguien murió;
                     System.out.println(animales[i].especie + 
                                     " se extingue por falta de alimento");
                 }
             }
             
-            if(!seMurioAlguien){
+            if(!seMurioAlguien){ //si nadie murió en la ronda, se avisa;
                 System.out.println("No hay mas extinciones en esta ronda");
             }
             ronda++;
         }
         
-        // Eliminar todos los muertos del grafo original
+        //una vez que ya se sabe quienes murieron, se eliminan del grafo;
         for(int i = 0; i < vertices; i++){
-            if(losMuertos[i]){
-                adyacencia[i].clear();
-                animales[i]  = null;
+            if(losMuertos[i]){ //si el animal fue identificado como muerto, matalo;
+                adyacencia[i].clear();//eliminador de aristas;
+                animales[i]  = null; //eliminador del animal del vector;
             }
         }
         //elimina las aristas entrantes que tengan en comun el animal muerto;
-        for(int i = 0; i < vertices; i++){
-            if(!losMuertos[i]){
-                adyacencia[i].removeIf(arista -> losMuertos[arista.destino.id]);
+        for(int i = 0; i < vertices; i++){ //recorre todos los animales;
+            if(!losMuertos[i]){ //si el animal no esta muerto, revisa las aristas;
+                adyacencia[i].removeIf(arista -> losMuertos[arista.destino.id]); //si tiene conexion con un animal muerto, elimina la conexión;
             }
         }
         // Resumen
-        System.out.println("\n" + "-------------");
+        System.out.println("\n" + "-------------"); //impresión de quien murió;
         System.out.print("Especies extintas: ");
         int numeroMuertos = 0;
         for(int i = 0; i < vertices; i++){
