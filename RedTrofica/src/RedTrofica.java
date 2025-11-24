@@ -146,6 +146,7 @@ public class RedTrofica {
         redTrofica.agregarArista(hierba, conejo);
         redTrofica.agregarArista(helecho, venado);
         redTrofica.agregarArista(ardilla, aguila);
+        redTrofica.agregarArista(ardilla, serpiente);
         redTrofica.agregarArista(raton, serpiente);
         redTrofica.agregarArista(abeja, rana);
         redTrofica.agregarArista(oso, bacteriaDescomponedora);
