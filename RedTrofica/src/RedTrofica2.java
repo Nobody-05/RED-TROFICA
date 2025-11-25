@@ -86,7 +86,7 @@ public record RedTrofica2() {
         // Agregar productores
         redTrofica.agregarProductor(0, "pino", 300);
         redTrofica.agregarProductor(1, "pasto", 50);
-        redTrofica.agregarProductor(2, "Roble", 80);
+        redTrofica.agregarProductor(2, "roble", 80);
 
         
         // Agregar consumidores primerarios
@@ -96,12 +96,12 @@ public record RedTrofica2() {
         redTrofica.agregarAnimal(6, "ardilla");
 
         // Agregar consumidores secundarios y terciarios
-        redTrofica.agregarAnimal(7, "lobo");
-        redTrofica.agregarAnimal(8, "zorro");
-        redTrofica.agregarAnimal(9, "Buho"); 
+        redTrofica.agregarAnimal(7, "zorro");
+        redTrofica.agregarAnimal(8, "lobo");
+        redTrofica.agregarAnimal(9, "buho"); 
 
         // Agregar descomponedores
-        redTrofica.agregarAnimal(10, "HONGO");
+        redTrofica.agregarAnimal(10, "hongo");
         
     
         // Crear referencias a los nodos
@@ -112,8 +112,8 @@ public record RedTrofica2() {
         serVivo conejo = redTrofica.animales[4];
         serVivo oruga = redTrofica.animales[5];
         serVivo ardilla = redTrofica.animales[6];
-        serVivo lobo = redTrofica.animales[7];
-        serVivo zorro = redTrofica.animales[8];
+        serVivo zorro = redTrofica.animales[7];
+        serVivo lobo = redTrofica.animales[8];
         serVivo buho = redTrofica.animales[9];
         serVivo hongo = redTrofica.animales[10];
     
@@ -121,8 +121,8 @@ public record RedTrofica2() {
         redTrofica.agregarArista(pino, oruga);
         redTrofica.agregarArista(pasto, conejo);
         redTrofica.agregarArista(pasto, venado);
-        redTrofica.agregarArista(oruga, ardilla);
         redTrofica.agregarArista(roble, ardilla);
+        redTrofica.agregarArista(oruga, ardilla);
         redTrofica.agregarArista(ardilla, zorro);
         redTrofica.agregarArista(ardilla, buho);
         redTrofica.agregarArista(conejo, zorro);
@@ -130,6 +130,6 @@ public record RedTrofica2() {
         redTrofica.agregarArista(zorro, lobo);
         redTrofica.agregarArista(lobo, hongo);
         redTrofica.agregarArista(buho, hongo);
-        redTrofica.agregarArista(zorro, buho);
+        redTrofica.agregarArista(zorro, hongo);
     }
 }

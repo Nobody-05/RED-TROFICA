@@ -188,11 +188,11 @@ public class GrafoListaAdyacencia {
             }
         }
 
-        System.out.println("\n   ID   |    ANIMALES    |    ENERGIA");
+        System.out.println("\nID   |ANIMAL: ENERGIA");
             for(int i = 0; i < vertices; i++) {
                 if(animales[i] != null){
                 //impresión de la energía total del animal i
-                System.out.println("id: " + animales[i].id + "|" + animales[i].especie + " --> energia total: " + animales[i].energia);
+                System.out.println("id: " + animales[i].id + "|" + animales[i].especie + ": " + animales[i].energia);
                 System.out.println();
                 }
             }
